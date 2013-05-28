@@ -91,7 +91,8 @@
         </site>
     </distributionManagement>
     <build>
-        <defaultGoal>install</defaultGoal>
+        <finalName>${project.name}</finalName>
+        <defaultGoal>clean package</defaultGoal>
         <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
 
         <extensions>
