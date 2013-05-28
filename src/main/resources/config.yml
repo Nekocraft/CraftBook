@@ -2,7 +2,7 @@ enable-circuits: true
 enable-mechanisms: true
 enable-vehicles: true
 
-language: en_US
+language: zh_CN
 no-op-permissions: false
 safe-destruction: true
 use-block-distance: false
@@ -38,7 +38,7 @@ mechanics:
         max-per-user: 30
     bookcase:
         enable: true
-        read-line: You pick up a book...
+        read-line: 你拿起了一本书...
     bridge:
         enable: true
         allow-redstone: true
