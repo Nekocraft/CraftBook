@@ -83,10 +83,13 @@ public abstract class LocalConfiguration {
     public boolean chairSneak;
     public boolean chairHealth;
     public List<Integer> chairBlocks;
+    public boolean chairFacing;
     // Mechanics - Chunk Anchor
     public boolean chunkAnchorEnabled;
     public boolean chunkAnchorRedstone;
     public boolean chunkAnchorCheck;
+    // Mechanics - Command Items
+    public boolean commandItemsEnabled;
     // Mechanics - Command Signs
     public boolean commandSignEnabled;
     // Mechanics - Cooking Pot
@@ -203,6 +206,7 @@ public abstract class LocalConfiguration {
     public boolean minecartPickupItemsOnCollision;
     public boolean minecartPressurePlateIntersection;
     public boolean minecartStoragePlaceRails;
+    public boolean minecartBlockAnimalEntry;
     // Vehicles - Minecart Fall Modifier
     public boolean minecartFallModifierEnabled;
     public double minecartFallVerticalSpeed;

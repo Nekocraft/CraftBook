@@ -180,6 +180,8 @@ public class CraftBookPlugin extends JavaPlugin {
         versionConverter.put("3.6.3r3", "2123");
         versionConverter.put("3.6.4", "2153");
         versionConverter.put("3.6.5", "2167");
+        versionConverter.put("3.6.6", "2203");
+        versionConverter.put("3.6.7", "2246");
     }
 
     public String parseVariables(String line) {
@@ -234,8 +236,7 @@ public class CraftBookPlugin extends JavaPlugin {
         // Setup Config and the Commands Manager
         final CraftBookPlugin plugin = this;
         createDefaultConfiguration(new File(getDataFolder(), "config.yml"), "config.yml", false);
-        config = new BukkitConfiguration(new YAMLProcessor(new File(getDataFolder(), "config.yml"), true,
-                YAMLFormat.EXTENDED), this);
+        config = new BukkitConfiguration(new YAMLProcessor(new File(getDataFolder(), "config.yml"), true, YAMLFormat.EXTENDED), this);
         commands = new CommandsManager<CommandSender>() {
 
             @Override
@@ -1014,11 +1015,11 @@ public class CraftBookPlugin extends JavaPlugin {
      *
      * @see GlobalRegionManager#canBuild(org.bukkit.entity.Player, org.bukkit.Location)
      */
-    public boolean canUse(Player player, Location loc, BlockFace face) {
+    public boolean canUse(Player player, Location loc, BlockFace face, Action action) {
 
         if (config.advancedBlockChecks) {
 
-            PlayerInteractEvent event = new PlayerInteractEvent(player, Action.RIGHT_CLICK_BLOCK, player.getItemInHand(), loc.getBlock(), face == null ? BlockFace.SELF : face);
+            PlayerInteractEvent event = new PlayerInteractEvent(player, action == null ? Action.RIGHT_CLICK_BLOCK : action, player.getItemInHand(), loc.getBlock(), face == null ? BlockFace.SELF : face);
             MechanicListenerAdapter.ignoredEvents.add(event);
             getServer().getPluginManager().callEvent(event);
             if(event.isCancelled())
@@ -1065,12 +1066,32 @@ public class CraftBookPlugin extends JavaPlugin {
         if(!inst().getConfiguration().debugMode || inst().getConfiguration().debugFlags == null || inst().getConfiguration().debugFlags.isEmpty())
             return false;
 
-        for(String testflag : inst().getConfiguration().debugFlags) {
+        String[] flagBits = flag.toLowerCase().split(":");
 
-            if(testflag.equalsIgnoreCase(flag))
-                return true;
+        String tempFlag = "";
+
+        for(int i = 0; i < flagBits.length; i++) {
+
+            if(i == 0)
+                tempFlag = flagBits[i];
+            else
+                tempFlag = tempFlag + "." + flagBits[i];
+
+            for(String testflag : inst().getConfiguration().debugFlags) {
+
+                if(testflag.toLowerCase().equals(tempFlag))
+                    return true;
+            }
         }
 
         return false;
+    }
+
+    public static void logDebugMessage(String message, String code) {
+
+        if(!isDebugFlagEnabled(code))
+            return;
+
+        logger().info("[Debug][" + code + "] " + message);
     }
 }

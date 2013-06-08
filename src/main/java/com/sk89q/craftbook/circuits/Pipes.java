@@ -1,6 +1,7 @@
 package com.sk89q.craftbook.circuits;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class Pipes extends AbstractMechanic {
          * @param items The items to send to the pipe.
          * @return The pipe constructed, otherwise null.
          */
-        public static Pipes setupPipes(Block pipe, Block source, List<ItemStack> items) {
+        public static Pipes setupPipes(Block pipe, Block source, ItemStack ... items) {
 
             if (pipe.getTypeId() == BlockID.PISTON_STICKY_BASE) {
 
@@ -58,7 +59,7 @@ public class Pipes extends AbstractMechanic {
                 Block fac = pipe.getRelative(p.getFacing());
                 if (fac.getLocation().equals(source.getLocation()))
                     if (CircuitCore.inst().getPipeFactory() != null)
-                        return CircuitCore.inst().getPipeFactory().detectWithItems(BukkitUtil.toWorldVector(pipe), items);
+                        return CircuitCore.inst().getPipeFactory().detectWithItems(BukkitUtil.toWorldVector(pipe), Arrays.asList(items));
             }
 
             return null;
@@ -115,7 +116,9 @@ public class Pipes extends AbstractMechanic {
             sign = (Sign) block.getRelative(face).getState();
             if(sign.getBlock().getTypeId() != BlockID.SIGN_POST && (face == BlockFace.UP || face == BlockFace.DOWN))
                 continue;
-            if(!SignUtil.getBackBlock(sign.getBlock()).getLocation().equals(block.getLocation()))
+            else if (sign.getBlock().getTypeId() == BlockID.SIGN_POST && face != BlockFace.UP && face != BlockFace.DOWN)
+                continue;
+            if(sign.getBlock().getTypeId() != BlockID.SIGN_POST && !SignUtil.getBackBlock(sign.getBlock()).getLocation().equals(block.getLocation()))
                 continue;
             if(sign != null && sign.getLine(1).equalsIgnoreCase("[Pipe]"))
                 return sign;
@@ -138,6 +141,7 @@ public class Pipes extends AbstractMechanic {
         scanSign(sign);
 
         if(items != null && !items.isEmpty()) {
+            fromIC = true;
             this.items.addAll(items);
             startPipe(BukkitUtil.toBlock(pt));
         }
@@ -166,6 +170,14 @@ public class Pipes extends AbstractMechanic {
 
     private List<ItemStack> items = new ArrayList<ItemStack>();
     private List<BlockVector> visitedPipes = new ArrayList<BlockVector>();
+
+    private boolean fromIC = false;
+
+    public List<ItemStack> getItems() {
+
+        while(items.remove(null)){}
+        return items;
+    }
 
     public void searchNearbyPipes(Block block) {
 
@@ -278,6 +290,9 @@ public class Pipes extends AbstractMechanic {
                     } catch (Exception e) {
                         BukkitUtil.printStacktrace(e);
                     }
+                } else {
+
+                    newItems.addAll(filteredItems);
                 }
 
                 items.removeAll(filteredItems);
@@ -348,7 +363,7 @@ public class Pipes extends AbstractMechanic {
                 } else f.getInventory().setResult(null);
             } else if (!items.isEmpty()) {
                 searchNearbyPipes(block);
-                if (!items.isEmpty())
+                if (!items.isEmpty() && !fromIC) //IC's should handle their own leftovers.
                     for (ItemStack item : items) {
                         if (!ItemUtil.isStackValid(item)) continue;
                         block.getWorld().dropItemNaturally(block.getLocation().add(0.5, 0.5, 0.5), item);

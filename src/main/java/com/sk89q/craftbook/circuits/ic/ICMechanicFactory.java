@@ -113,12 +113,20 @@ public class ICMechanicFactory extends AbstractMechanicFactory<ICMechanic> {
 
                 ICManager.removeCachedIC(pt);
                 ic = registration.getFactory().create(sign);
+                if(!sign.getLine(0).equals(ic.getSignTitle()) && !sign.getLine(0).startsWith("=")) {
+                    sign.setLine(0, ic.getSignTitle());
+                    sign.update(false);
+                }
                 ic.load();
                 // add the created ic to the cache
                 ICManager.addCachedIC(pt, ic);
             }
         } else {
             ic = registration.getFactory().create(sign);
+            if(!sign.getLine(0).equals(ic.getSignTitle()) && !sign.getLine(0).startsWith("=")) {
+                sign.setLine(0, ic.getSignTitle());
+                sign.update(false);
+            }
             ic.load();
             // add the created ic to the cache
             ICManager.addCachedIC(pt, ic);
@@ -223,8 +231,7 @@ public class ICMechanicFactory extends AbstractMechanicFactory<ICMechanic> {
 
             if (ICManager.isCachedIC(pt)) {
 
-                if(CraftBookPlugin.isDebugFlagEnabled("ic-create"))
-                    CraftBookPlugin.inst().getLogger().warning("Existing IC found at selected location!");
+                CraftBookPlugin.logDebugMessage("Existing IC found at selected location!", "ic-create");
                 ICManager.removeCachedIC(pt);
             }
 

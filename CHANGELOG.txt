@@ -1,5 +1,50 @@
+3.6.7
+* Modified the way Bounce pistons modify velocities, allowing for multiple bounce pistons with perfect timing to do diagonals.
+* Tweaked animal vehicle entry blocker.
+* Fix AutoCrafter not working for unstackable items.
+* Fix Bridges/Doors not working if less than 3 thick.
+* Fix Bridges/Doors not detecting invalid materials if more than 3 thick.
++ Added CommandItems mechanic. Allows for items to perform commands with cooldown, extra commands after a delay, and many other features.
+* Fix CustomCrafting not requiring lore to create items with lore in the ingredients.
+* Fix BlockBreaker requiring an ID.
+* Tweaked IC Pipe Integration - Now way less buggy.
++ Added the ability to limit the amount of outputs a random IC could have toggled on.
++ Added the ability for ContentsSensor to check minimum amounts.
+* Fix snow landing on blocks it shouldn't land on.
+* Fix CustomDrops with 'x' in the lore/name.
+* Fix SentryGun error with no type set.
+* Move ParticleEffect IC offset to the other line for more space.
+* Fix Cultivator IC not breaking the hoe.
++ Added a message for when you use a recipe command and recipes are disabled.
++ Added a message for /recp remove.
+* Fix creating a CustomCrafting recipe ingame modifying the inventory.
+* Fix ColourCodes not being checked in CustomCrafting.
+
 3.6.6
 + Added a slow mode to elevators, to smoothly move the player to the destination. (xTwisteDx from LegendaryChaos.Zapto.org insired me to do it)
+* Fix a few replacable block issues.
++ Added support for CustomCrafting to require a recipe to have ingredients with certain names, enchants or lore.
++ Added /recp remove to remove recipes ingame (Still craftable until restart due to bukkit limitations)
+* Fix ItemDispenser not dropping more than the max stack size.
+* Tweaked JingleNote Volume support. (Sounds Nicer)
++ Added SentryGun IC
++ Added Lore, Name and Enchant support to Custom Drops.
+* Fix Marquee on 1.5.2
++ Added 'advanced data' support to furnace recipes. (Not Perm Node or Extra Results due to bukkit/mc limitations)
+* Fix CustomCrafting truncating ingame recipes.
+* Allowed & to be used as a colour character in many circumstances, instead of section sign.
++ Added Wolves to AnimalBreeder.
++ Added an option to disable persistent data IC's saving data.
+* Small tweaks to vehicles
++ Added an option to disallow animals to get into minecarts.
+* Tweaked Delayer to allow it to not cancel on low.
+* Few chunk tweaks.
+* Fixed CraftBook interfering with Block Logging plugins.
++ Added pedantic block checks mode, which adds extra block checks if compatability options occur.
++ Added Villager, Sheep and Cow heads to HeadDrops. (Thanks to people on IRC)
+* Fixed Variables not working on CommandSigns.
+* Fix a major dupe bug.
+* Made IC's set sign title if it is wrong.
 
 3.6.5
 + Added HeadDrops mechanic. Adds the ability for players to drop their heads, and for animals that can't drop heads in vanilla mc to drop heads. (Blazes, Silverfish, Bats, Etc)

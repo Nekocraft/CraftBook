@@ -1,7 +1,6 @@
 package com.sk89q.craftbook.circuits.gates.world.items;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -122,22 +121,27 @@ public class AutomaticCrafter extends AbstractSelfTriggeredIC implements PipeInp
         }
         disp.getInventory().clear();
 
-        boolean pipes = false;
+        CraftBookPlugin.logDebugMessage("AutoCrafter is dispensing a " + result.getTypeId() + " with data: " + result.getDurability() + " and amount: " + result.getAmount(), "ic-mc1219");
 
-        if(CraftBookPlugin.isDebugFlagEnabled("ic-mc1219")) {
-            CraftBookPlugin.logger().info("AutoCrafter is dispensing a " + result.getTypeId() + " with data: " + result.getDurability() + " and amount: " + result.getAmount());
+        List<ItemStack> items = new ArrayList<ItemStack>();
+        items.add(result);
+
+        Pipes pp = Pipes.Factory.setupPipes(((BlockState) disp).getBlock().getRelative(((org.bukkit.material.Directional) ((BlockState) disp).getData()).getFacing()), ((BlockState) disp).getBlock(), items.toArray(new ItemStack[items.size()]));
+
+        if (pp != null) {
+            items.clear();
+            items.addAll(pp.getItems());
         }
 
-        if(Pipes.Factory.setupPipes(((BlockState) disp).getBlock().getRelative(((org.bukkit.material.Directional) ((BlockState) disp).getData()).getFacing()), ((BlockState) disp).getBlock(), Arrays.asList(result)) != null)
-            pipes = true;
-
-        if (!pipes) {
-            if(disp.getInventory().addItem(result).isEmpty())
-                for(int i = 0; i < result.getAmount(); i++)
-                    if(disp instanceof Dispenser)
-                        ((Dispenser) disp).dispense();
-                    else if(disp instanceof Dropper)
-                        ((Dropper) disp).drop();
+        if(!items.isEmpty()) {
+            for(ItemStack stack : items) {
+                if(disp.getInventory().addItem(stack).isEmpty())
+                    for(int i = 0; i < stack.getAmount(); i++)
+                        if(disp instanceof Dispenser)
+                            ((Dispenser) disp).dispense();
+                        else if(disp instanceof Dropper)
+                            ((Dropper) disp).drop();
+            }
         }
         disp.getInventory().setContents(replace);
         return true;
@@ -155,7 +159,7 @@ public class AutomaticCrafter extends AbstractSelfTriggeredIC implements PipeInp
             for (int i = 0; i < stack.getAmount(); i++) {
                 ItemStack it = ItemUtil.getSmallestStackOfType(disp.getInventory().getContents(), stack);
                 if (it == null) break;
-                if (it.getAmount() < it.getMaxStackSize()) {
+                if (it.getAmount() < 64) {
                     it.setAmount(it.getAmount() + 1);
                     newAmount -= 1;
                 } else if (newAmount > 0) {
@@ -164,12 +168,14 @@ public class AutomaticCrafter extends AbstractSelfTriggeredIC implements PipeInp
                 }
             }
 
-            stack.setAmount(newAmount);
-            item.setItemStack(stack);
-
             if (newAmount > 0) delete = false;
 
-            if (delete) item.remove();
+            if (delete) {
+                item.remove();
+            } else {
+                stack.setAmount(newAmount);
+                item.setItemStack(stack);
+            }
         }
         return false;
     }
@@ -313,7 +319,7 @@ public class AutomaticCrafter extends AbstractSelfTriggeredIC implements PipeInp
                 for (int i = 0; i < ite.getAmount(); i++) {
                     ItemStack it = ItemUtil.getSmallestStackOfType(disp.getInventory().getContents(), ite);
                     if (!ItemUtil.isStackValid(it) || !ItemUtil.areItemsIdentical(ite, it)) continue;
-                    if (it.getAmount() < it.getMaxStackSize()) {
+                    if (it.getAmount() < 64) {
                         it.setAmount(it.getAmount() + 1);
                         newAmount -= 1;
                     } else {

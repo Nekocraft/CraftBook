@@ -160,7 +160,10 @@ public class HeadDrops implements Listener {
         PIG("XlexerX"),
         PIG_ZOMBIE("ManBearPigZombie"),
         BAT("coolwhip101"),
-        SPIDER("Kelevra_V");
+        SPIDER("Kelevra_V"),
+        VILLAGER("Villager"),
+        SHEEP("Eagle_Peak"),
+        COW("VerifiedBernard");
 
         MobSkullType(String playerName) {
 

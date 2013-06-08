@@ -37,7 +37,13 @@ public class RecipeCommands {
     @CommandPermissions(value = "craftbook.mech.recipes.remove")
     public void deleteRecipe(CommandContext context, CommandSender sender) throws CommandException {
 
+        if(RecipeManager.INSTANCE == null) {
+            sender.sendMessage(ChatColor.RED + "CustomCrafting is not enabled!");
+            return;
+        }
+
         if(RecipeManager.INSTANCE.removeRecipe(context.getString(0))) {
+            sender.sendMessage(ChatColor.RED + "Recipe removed successfully! This will be in effect after a restart!");
             RecipeManager.INSTANCE.save();
         } else
             sender.sendMessage(ChatColor.RED + "Recipe doesn't exist!");
@@ -45,6 +51,11 @@ public class RecipeCommands {
 
     @Command(aliases = {"save", "add"}, desc = "Saves the current recipe", usage = "RecipeName RecipeType -p permission node", flags = "p:", min = 2)
     public void saveRecipe(CommandContext context, CommandSender sender) throws CommandException {
+
+        if(RecipeManager.INSTANCE == null) {
+            sender.sendMessage(ChatColor.RED + "CustomCrafting is not enabled!");
+            return;
+        }
 
         if (!(sender instanceof Player)) return;
         LocalPlayer player = plugin.wrapPlayer((Player) sender);
@@ -161,7 +172,7 @@ public class RecipeCommands {
                 if(!ItemUtil.isStackValid(slot))
                     continue;
 
-                CraftingItemStack stack = new CraftingItemStack(slot);
+                CraftingItemStack stack = new CraftingItemStack(slot.clone());
 
                 boolean used = false;
                 for(CraftingItemStack compare : ingredients) {

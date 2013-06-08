@@ -113,13 +113,16 @@ public class YAMLConfiguration extends LocalConfiguration {
         chairEnabled = config.getBoolean("mechanics.chair.enable", true);
         chairSneak = config.getBoolean("mechanics.chair.require-sneak", true);
         chairHealth = config.getBoolean("mechanics.chair.regen-health", true);
-        chairBlocks = config.getIntList("mechanics.chair.blocks", Arrays.asList(53, 67, 108, 109, 114, 128, 134, 135,
-                136, 156));
+        chairBlocks = config.getIntList("mechanics.chair.blocks", Arrays.asList(53, 67, 108, 109, 114, 128, 134, 135, 136, 156));
+        chairFacing = config.getBoolean("mechanics.chair.face-correct-direction", true);
 
         // Chunk Anchor Configuration Listener
         chunkAnchorEnabled = config.getBoolean("mechanics.chunk-anchor.enable", true);
         chunkAnchorRedstone = config.getBoolean("mechanics.chunk-anchor.enable-redstone", true);
         chunkAnchorCheck = config.getBoolean("mechanics.chunk-anchor.check-chunks", true);
+
+        // Command Items Configuration Listener
+        commandItemsEnabled = config.getBoolean("mechanics.command-items.enable", true);
 
         // Command Sign Configuration Listener
         commandSignEnabled = config.getBoolean("mechanics.command-sign.enable", true);
@@ -259,6 +262,7 @@ public class YAMLConfiguration extends LocalConfiguration {
         minecartPickupItemsOnCollision = config.getBoolean("vehicles.minecart.item-pickup-collision", false);
         minecartPressurePlateIntersection = config.getBoolean("vehicles.minecart.pressure-plate-intersection", false);
         minecartStoragePlaceRails = config.getBoolean("vehicles.minecart.storage-place-rails", false);
+        minecartBlockAnimalEntry = config.getBoolean("vehicles.minecart.block-animal-entry", false);
 
         // Vehicles Minecart Fall Speed Listener
         minecartFallModifierEnabled = config.getBoolean("vehicles.minecart.fall-speed.enable", false);

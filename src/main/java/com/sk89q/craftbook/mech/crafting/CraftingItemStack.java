@@ -39,8 +39,7 @@ public class CraftingItemStack implements Comparable<CraftingItemStack> {
     }
 
     public void addAdvancedData(String key, Object data) {
-        if(CraftBookPlugin.isDebugFlagEnabled("advanced-data"))
-            CraftBookPlugin.logger().info("Adding advanced data of type: " + key + " to an ItemStack!");
+        CraftBookPlugin.logDebugMessage("Adding advanced data of type: " + key + " to an ItemStack!", "advanced-data.init");
         advancedData.put(key, data);
     }
 
@@ -104,8 +103,9 @@ public class CraftingItemStack implements Comparable<CraftingItemStack> {
                 return false;
             if(stack.hasAdvancedData() != hasAdvancedData())
                 return false;
-            if(stack.hasAdvancedData("name") != hasAdvancedData("name"))
-                return false;
+            for(String key : advancedData.keySet())
+                if(!stack.hasAdvancedData(key))
+                    return false;
             return isSameType(stack) && stack.getItemStack().getAmount() == getItemStack().getAmount();
         }
         return false;
